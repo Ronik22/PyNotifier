@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+<!-- HEAD -->
+{% block head %} 
+<title>PyNotifier | Edit</title>
+{% endblock %}
+
+
+<!-- BODY -->
+{% block body %} 
+
+<div class="layout">
+<form action="/edit/{{task.id}}" method="post">
+    <div>Date: <input type="text" name="date" value="{{task.date}}"></div>
+    <div>Time: <input type="text" name="time" value="{{task.time}}"></div>
+    <div>Event Content: <input type="text" name="content" value="{{task.content}}"></div>
+    <label for="options">How should I remind you ? </label>
+    <select name="opt" id="opt">
+        <option value="notification" {% if task.opt == 'notification' %} selected="selected"{% endif %}>Notification in PC</option>
+        <option value="sms" {% if task.opt == 'sms' %} selected="selected"{% endif %}>SMS</option>
+    </select>
+    <br><br>
+    <input type="submit" value="Save">
+</form>
+</div>
+
+{% endblock %}

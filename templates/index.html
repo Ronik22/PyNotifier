@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+<!-- HEAD -->
+{% block head %} 
+<title>PyNotifier</title>
+{% endblock %}
+
+
+<!-- BODY -->
+{% block body %} 
+
+<div class="layout">
+<form action="/task" method="post">
+    <div>Date: <input type="text" name="date"></div>
+    <div>Time: <input type="text" name="time"></div>
+    <div>Event Content: <input type="text" name="content"></div>
+    <label for="options">How should I remind you ? </label>
+    <select name="opt" id="opt">
+        <option value="notification">Notification in PC</option>
+        <option value="sms">SMS</option>
+    </select>
+    <br><br>
+    <input type="submit" value="Add task">
+</form>
+
+<br>
+<table style="width:100%">
+    <tr>
+      <th>Event</th>
+      <th>Date</th> 
+      <th>Time</th>
+      <th>Via</th>
+      <th>Options</th>
+    </tr>
+    {% for task in tasks %}
+        <tr>
+            <td>
+                {% if task.done %} 
+                <strike> 
+                    {% endif %}
+                    {{ task.content }}
+                    {% if task.done %} 
+                </strike>
+                {% endif %}
+            </td>
+            <td>{{task.date}}</td>
+            <td>{{task.time}}</td>
+            <td>{{task.opt}}</td>
+            <td class="btns">
+                <a href="/done/{{ task.id }}">Check</a>
+                <a href="/delete/{{ task.id }}">Delete</a>
+                <a href="/edit/{{ task.id }}">Edit</a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+</div>
+
+
+{% endblock %}
