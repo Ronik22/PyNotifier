@@ -2,11 +2,14 @@ from flask import Flask, request
 from flask import render_template
 from flask import redirect
 from flask_sqlalchemy import SQLAlchemy
-
+import time
 from datetime import datetime
+
 from plyer import notification 
 from twilio.rest import Client 
-import time 
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+import smtplib
 
 from apscheduler.schedulers.background import BackgroundScheduler
 import atexit
@@ -19,6 +22,19 @@ account_sid = ''      # Enter your 'ACCOUNT SID' inside the quotes
 auth_token = ''       # Enter your 'AUTH TOKEN' inside the quotes
 twilio_from_num = ''    # Enter your twilio phone no. inside the quotes
 twilio_to_num = ''      # Enter your registered twilio phone no. to which you want to send the SMS
+
+
+##############  ENTER CREDENTIALS HERE TO RECEIVE EMAIL  ##############
+
+# Create a SendGrid account for emails
+sendgrid_from_mail = ''
+sendgrid_to_mail = ''
+sendgrid_api = ''
+
+smtp_sender_email = ''
+smtp_sender_pwd = ''
+smtp_receiver_email = ''
+
 
 
 app = Flask(__name__)
@@ -50,8 +66,12 @@ def notify():
     tasks = Task.query.all()
     for task in tasks:
         if task.date == datenow and task.time == timenow:
-            if task.opt == 'sms':
+            if task.opt == 'SMS':
                 notify_via_Sms(task.content)
+                delete_task(task.id)
+                return redirect('/')
+            elif task.opt == 'Email':
+                notify_via_Email(task.content)
                 delete_task(task.id)
                 return redirect('/')
             else:
@@ -59,14 +79,39 @@ def notify():
                 delete_task(task.id)
                 return redirect('/')
 
-
-def notify_via_Notification(content):
+def notify_via_Notification(content):   # fix needed
     notification.notify( 
                     title="Reminder...", 
                     message=content,
                     app_name="PyNotifier by Ronik", 
                     timeout=10
                 )
+
+def notify_via_Email(content):
+
+    ############ SendGrid mail using api ############
+    # message = Mail(
+    # from_email=sendgrid_from_mail,
+    # to_emails=sendgrid_to_mail,
+    # subject="Reminder notification...",
+    # html_content=content)
+    # try:
+    #     sg = SendGridAPIClient(sendgrid_api)
+    #     response = sg.send(message)
+    #     print(response.status_code)
+    #     print(response.body)
+    #     print(response.headers)
+    # except Exception as e:
+    #     print(e.message)
+
+    ############ SMTP mail  ############
+    s = smtplib.SMTP('smtp.gmail.com', 587) 
+    s.starttls() 
+    s.login(smtp_sender_email, smtp_sender_pwd) 
+    message = content
+    s.sendmail(smtp_sender_email, smtp_receiver_email, message) 
+    s.quit() 
+
 
 def notify_via_Sms(content):
     client = Client(account_sid, auth_token) 
@@ -77,7 +122,7 @@ def notify_via_Sms(content):
                                     ) 
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=notify, trigger="interval", seconds=3600)
+scheduler.add_job(func=notify, trigger="interval", seconds=10)
 scheduler.start()
 
 # Shut down the scheduler when exiting the app

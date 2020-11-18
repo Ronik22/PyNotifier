@@ -16,8 +16,9 @@
     <div>Event Content: <input type="text" name="content" value="{{task.content}}"></div>
     <label for="options">How should I remind you ? </label>
     <select name="opt" id="opt">
-        <option value="notification" {% if task.opt == 'notification' %} selected="selected"{% endif %}>Notification in PC</option>
-        <option value="sms" {% if task.opt == 'sms' %} selected="selected"{% endif %}>SMS</option>
+        <option value="Notification" {% if task.opt == 'Notification' %} selected="selected"{% endif %}>Notification in PC</option>
+        <option value="SMS" {% if task.opt == 'SMS' %} selected="selected"{% endif %}>SMS</option>
+        <option value="Email" {% if task.opt == 'Email' %} selected="selected"{% endif %}>Email</option>
     </select>
     <br><br>
     <input type="submit" value="Save">
