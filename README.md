@@ -1,2 +1,2 @@
 # PyNotifier
-A simple CLI reminder script
+Flask app for event notifications
