@@ -9,53 +9,58 @@
 <!-- BODY -->
 {% block body %} 
 
-<div class="layout">
-<form action="/task" method="post">
-    <div>Date: <input type="text" name="date"></div>
-    <div>Time: <input type="text" name="time"></div>
-    <div>Event Content: <input type="text" name="content"></div>
-    <label for="options">How should I remind you ? </label>
-    <select name="opt" id="opt">
-        <option value="Notification">Notification in PC</option>
-        <option value="SMS">SMS</option>
-        <option value="Email">Email</option>
-    </select>
-    <br><br>
-    <input type="submit" value="Add task">
-</form>
+<div id="pagecont">
+    <div class="leftpart">
 
-<br>
-<table style="width:100%">
-    <tr>
-      <th>Event</th>
-      <th>Date</th> 
-      <th>Time</th>
-      <th>Via</th>
-      <th>Options</th>
-    </tr>
-    {% for task in tasks %}
-        <tr>
-            <td>
-                {% if task.done %} 
-                <strike> 
-                    {% endif %}
-                    {{ task.content }}
-                    {% if task.done %} 
-                </strike>
-                {% endif %}
-            </td>
-            <td>{{task.date}}</td>
-            <td>{{task.time}}</td>
-            <td>{{task.opt}}</td>
-            <td class="btns">
-                <a href="/done/{{ task.id }}">Check</a>
-                <a href="/delete/{{ task.id }}">Delete</a>
-                <a href="/edit/{{ task.id }}">Edit</a>
-            </td>
-        </tr>
-    {% endfor %}
-</table>
+    </div>
+    <div class="rightpart">
+        <form action="/task" method="post">
+            <div>Date: <input type="text" name="date"></div>
+            <div>Time: <input type="text" name="time"></div>
+            <div>Event Content: <input type="text" name="content"></div>
+            <label for="options">How should I remind you ? </label>
+            <select name="opt" id="opt">
+                <option value="Notification">Notification in PC</option>
+                <option value="SMS">SMS</option>
+                <option value="Email">Email</option>
+            </select>
+            <br><br>
+            <input type="submit" value="Add task">
+        </form>
+    </div>
 </div>
-
+<br>
+<div id="tablecont">
+    <table style="width:100%">
+        <tr>
+        <th>EVENT</th>
+        <th>DATE</th> 
+        <th>TIME</th>
+        <th>VIA</th>
+        <th>OPTIONS</th>
+        </tr>
+        {% for task in tasks %}
+            <tr>
+                <td>
+                    {% if task.done %} 
+                    <strike> 
+                        {% endif %}
+                        {{ task.content }}
+                        {% if task.done %} 
+                    </strike>
+                    {% endif %}
+                </td>
+                <td class="btnfix">{{task.date}}</td>
+                <td class="btnfix">{{task.time}}</td>
+                <td>{{task.opt}}</td>
+                <td class="btns">
+                    <a style="background-color:#00ee14;" href="/done/{{ task.id }}"><i class="fas fa-check"></i>&nbsp&nbspCheck</a>
+                    <a style="background-color: #ff6811;" href="/delete/{{ task.id }}"><i class="fas fa-trash"></i>&nbsp&nbspDelete</a>
+                    <a style="background-color:#ffe70e; color: black;" href="/edit/{{ task.id }}"><i class="fas fa-pencil-alt"></i>&nbsp&nbspEdit</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
 
 {% endblock %}
