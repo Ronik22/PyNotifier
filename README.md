@@ -1,5 +1,5 @@
 # PyNotifier
-Flask app for event notifications
+Flask app for event notifications. A Local CLI version is also available.
 
 Installation
 ------------
@@ -15,6 +15,8 @@ Installation
 Note for Python 3.4 users: replace `virtualenv` with `pyvenv`.
 
 Note for Microsoft Windows users: replace the virtual environment activation command above with `venv\Scripts\activate`.
+
+For CLI script simply run `$ python .\PyNotifier_CLI_only.py`
 
 <br>
 
